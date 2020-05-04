@@ -54,14 +54,9 @@ namespace SoftwareRenderer3D
             color |= b << 0;
         }
 
-        protected void DrawPixel(int x, int y)
-        {
-            FillRect(new Int32Rect(x, y, 1, 1));
-        }
-
         protected void DrawLine(Point start, Point end)
         {
-            // Implementation of the Bresenham Linedrawing Algortihm derived from the ideas given in
+            // Implementation of the Bresenham line algorithm derived from the ideas given in
             // https://de.wikipedia.org/wiki/Bresenham-Algorithmus
             // https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
 
@@ -81,11 +76,11 @@ namespace SoftwareRenderer3D
 
             if (dy == 0) // horizontal line
             {
-                FillRect(new Int32Rect(x1, y1, x2 - x1, 1));
+                FillRect(new Int32Rect((x2 < x1 ? x2 : x1), y1, Math.Abs(x2 - x1), 1));
             }
             else if (dx == 0) // vertical line
             {
-                FillRect(new Int32Rect(x1, y1, 1, y2 - y1));
+                FillRect(new Int32Rect(x1, (y2 < y1 ? y2 : y1), 1, Math.Abs(y2 - y1)));
             }
 
             else if (dy <= dx) // between pi/4 and -pi/4 (including)
@@ -115,6 +110,15 @@ namespace SoftwareRenderer3D
                         error -= dy;
                     }
                 }
+            }
+        }
+
+        protected void DrawPixel(int x, int y)
+        {
+            unsafe
+            {
+                IntPtr pBackBuffer = bitmap.BackBuffer + y * bitmap.BackBufferStride + x * BytesPerPixel;
+                *((int*)pBackBuffer) = color;
             }
         }
 

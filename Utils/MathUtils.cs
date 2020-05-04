@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SoftwareRenderer
+namespace Sr3D.Utils
 {
     public static class MathUtils
     {

@@ -1,4 +1,4 @@
-﻿using SoftwareRenderer3D;
+﻿using Sr3D.Graphics;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;

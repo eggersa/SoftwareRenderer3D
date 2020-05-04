@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Sr3D.Core;
+using Sr3D.Utils;
+using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace SoftwareRenderer3D
+namespace Sr3D.Graphics
 {
     public abstract class BitmapRenderer
     {
@@ -14,6 +17,16 @@ namespace SoftwareRenderer3D
 
         private int color = 0;
         private WriteableBitmap bitmap;
+
+        public int PixelWidth
+        {
+            get => bitmap.PixelWidth;
+        }
+
+        public int PixelHeight
+        {
+            get => bitmap.PixelHeight;
+        }
 
         public BitmapRenderer(Image renderTarget)
         {
@@ -53,6 +66,23 @@ namespace SoftwareRenderer3D
             color |= g << 8;
             color |= b << 0;
         }
+
+        //protected void DrawLine(Point start, Point end)
+        //{
+        //    // Get absolute coordinates
+        //    //
+        //    int x1 = (int)(start.X * bitmap.PixelWidth);
+        //    int y1 = (int)(start.Y * bitmap.PixelHeight);
+        //    int x2 = (int)(end.X * bitmap.PixelWidth);
+        //    int y2 = (int)(end.Y * bitmap.PixelHeight);
+
+        //    var enumerator = new BresenhamEnumerator(new Int32Point(x1, y1), new Int32Point(x2, y2));
+        //    while (enumerator.MoveNext())
+        //    {
+        //        // Debug.WriteLine(enumerator.Current);
+        //        DrawPixel(enumerator.Current.X, enumerator.Current.Y);
+        //    }
+        //}
 
         protected void DrawLine(Point start, Point end)
         {

@@ -10,17 +10,20 @@ namespace Sr3D.Utils
     /// algorithm for drawing a line between two points. The algorithm can be implemented using only integer arithmetic which
     /// makes it very fast. The BresenhamIterator class allows to enumerate over each point on a line.
     /// </summary>
-    public sealed class BresenhamEnumerator : IEnumerator<Int32Point>
+    public sealed class BresenhamEnumerator : IEnumerator<Int32Point>, IEnumerable<Int32Point>
     {
         private Int32Point current;
         private int dx, dy, xinc, yinc, error;
         private Int32Point start, end;
         private bool reset;
+        private bool iterateY;
 
-        public BresenhamEnumerator(Int32Point start, Int32Point end)
+        public BresenhamEnumerator(Int32Point start, Int32Point end, bool iterateY = false)
         {
             this.start = start;
             this.end = end;
+            this.iterateY = iterateY;
+
             dx = this.end.X - this.start.X;
             dy = this.end.Y - this.start.Y;
             xinc = Math.Sign(dx);
@@ -104,5 +107,31 @@ namespace Sr3D.Utils
         {
             // nothing to dispose
         }
+
+        public bool MoveNextY()
+        {
+            int y = current.Y;
+            while(MoveNext())
+            {
+                if(y != current.Y)
+                {
+                    return current.Y != end.Y;
+                }
+            }
+
+            return false;
+        }
+
+        #region IEnumerable<Int32Point> interface
+        public IEnumerator<Int32Point> GetEnumerator()
+        {
+            return this;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this;
+        }
+        #endregion IEnumerable<Int32Point> interface
     }
 }

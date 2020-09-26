@@ -10,9 +10,15 @@
 
         public static Int32Point Empty { get; } = new Int32Point();
 
-        public int X { get; set; }
+        public int X;
 
-        public int Y { get; set; }
+        public int Y;
+
+        public void Offset(int dx, int dy)
+        {
+            X += dx;
+            Y += dy;
+        }
 
         public static bool Equals(Int32Point int32Point1, Int32Point int32RPoint2)
         {

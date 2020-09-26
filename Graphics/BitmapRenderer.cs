@@ -164,11 +164,12 @@ namespace Sr3D.Graphics
                     {
                         if (x == rect.X)
                         {
+                            // left offset
                             pBackBuffer += x * BytesPerPixel;
                         }
 
-                        pBackBuffer += BytesPerPixel;
                         *((int*)pBackBuffer) = color;
+                        pBackBuffer += BytesPerPixel;
                     }
                 }
             }

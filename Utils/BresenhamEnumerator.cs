@@ -34,9 +34,9 @@ namespace Sr3D.Utils
             Reset();
         }
 
-        public Int32Point Current => current; // unsafe
+        public Int32Point Current => current;
 
-        object IEnumerator.Current => current; // unsafe
+        object IEnumerator.Current => current;
 
         public bool MoveNext()
         {

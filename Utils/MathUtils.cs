@@ -1,5 +1,6 @@
 ﻿using Sr3D.Core;
 using System;
+using System.Numerics;
 using System.Windows;
 
 namespace Sr3D.Utils
@@ -21,6 +22,11 @@ namespace Sr3D.Utils
         public static Int32Point DeviceToScreenCoordinates(Point p, int screenWidth, int screenHeight)
         {
             return new Int32Point((int)(p.X * screenWidth), (int)(p.Y * screenHeight));
+        }
+
+        public static float Perp(Vector2 a, Vector2 b)
+        {
+            return Vector2.Dot(new Vector2(-a.Y, a.X), b);
         }
     }
 }

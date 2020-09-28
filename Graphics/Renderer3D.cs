@@ -21,13 +21,13 @@ namespace Sr3D.Graphics
         {
             context.ClearScreen();
 
-            var rasterizer = new ScanlineRasterizer(context);
+            var rasterizer = new EdgeRasterizer(context);
 
             Point[] data = new Point[] 
             { 
+                new Point(0.1, 0.4),
                 new Point(0.2, 0.2),
                 new Point(0.5, 0.6),
-                new Point(0.1, 0.4)
             };
 
             rasterizer.FillTriangle(Colors.White,

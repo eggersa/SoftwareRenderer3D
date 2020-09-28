@@ -1,7 +1,5 @@
-﻿using Sr3D.Core;
-using Sr3D.Utils;
-using System;
-using System.Diagnostics;
+﻿using SoftwareRenderer3D.Graphics;
+using Sr3D.Core;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -12,10 +10,9 @@ namespace Sr3D.Graphics
     public abstract class BitmapRenderer
     {
         private readonly PixelFormat PixelFormat = PixelFormats.Bgr32;
-        private readonly int BytesPerPixel = PixelFormats.Bgr32.BitsPerPixel / 8;
+
         private readonly Image RenderTarget;
 
-        private int color = 0;
         private WriteableBitmap bitmap;
 
         public int PixelWidth
@@ -44,7 +41,8 @@ namespace Sr3D.Graphics
             try
             {
                 bitmap.Lock();
-                RenderCore();
+                var context = new BitmapContext(bitmap);
+                RenderCore(context);
                 bitmap.AddDirtyRect(new Int32Rect(0, 0, bitmap.PixelWidth, bitmap.PixelHeight));
             }
             finally
@@ -53,126 +51,6 @@ namespace Sr3D.Graphics
             }
         }
 
-        protected abstract void RenderCore();
-
-        protected void ClearBitmap()
-        {
-            NativeWin32.RtlZeroMemory(bitmap.BackBuffer, bitmap.PixelWidth * bitmap.PixelHeight * BytesPerPixel);
-        }
-
-        protected void SetColor(byte r, byte g, byte b)
-        {
-            color = r << 16;
-            color |= g << 8;
-            color |= b << 0;
-        }
-
-        //protected void DrawLine(Point start, Point end)
-        //{
-        //    // Get absolute coordinates
-        //    //
-        //    int x1 = (int)(start.X * bitmap.PixelWidth);
-        //    int y1 = (int)(start.Y * bitmap.PixelHeight);
-        //    int x2 = (int)(end.X * bitmap.PixelWidth);
-        //    int y2 = (int)(end.Y * bitmap.PixelHeight);
-
-        //    var enumerator = new BresenhamEnumerator(new Int32Point(x1, y1), new Int32Point(x2, y2));
-        //    while (enumerator.MoveNext())
-        //    {
-        //        // Debug.WriteLine(enumerator.Current);
-        //        DrawPixel(enumerator.Current.X, enumerator.Current.Y);
-        //    }
-        //}
-
-        protected void DrawLine(Point start, Point end)
-        {
-            // Implementation of the Bresenham line algorithm derived from the ideas given in
-            // https://de.wikipedia.org/wiki/Bresenham-Algorithmus
-            // https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
-
-            // Get absolute coordinates
-            //
-            int x1 = (int)(start.X * bitmap.PixelWidth);
-            int y1 = (int)(start.Y * bitmap.PixelHeight);
-            int x2 = (int)(end.X * bitmap.PixelWidth);
-            int y2 = (int)(end.Y * bitmap.PixelHeight);
-
-            int dy = y2 - y1;
-            int dx = x2 - x1;
-            int xinc = Math.Sign(dx);
-            int yinc = Math.Sign(dy);
-            dx *= xinc; // make dx always positive
-            dy *= yinc; // make dy always positive
-
-            if (dy == 0) // horizontal line
-            {
-                FillRect(new Int32Rect((x2 < x1 ? x2 : x1), y1, Math.Abs(x2 - x1), 1));
-            }
-            else if (dx == 0) // vertical line
-            {
-                FillRect(new Int32Rect(x1, (y2 < y1 ? y2 : y1), 1, Math.Abs(y2 - y1)));
-            }
-
-            else if (dy <= dx) // between pi/4 and -pi/4 (including)
-            {
-                int error = -dx / 2;
-                for (; x1 != x2; x1 += xinc)
-                {
-                    DrawPixel(x1, y1);
-                    error += dy;
-                    if (error >= 0)
-                    {
-                        y1 += yinc;
-                        error -= dx;
-                    }
-                }
-            }
-            else
-            {
-                int error = -dy / 2; // between pi/2 and pi/4 or between -pi/4 and -pi/2 (excluding)
-                for (; y1 != y2; y1 += yinc)
-                {
-                    DrawPixel(x1, y1);
-                    error += dx;
-                    if (error >= 0)
-                    {
-                        x1 += xinc;
-                        error -= dy;
-                    }
-                }
-            }
-        }
-
-        protected void DrawPixel(int x, int y)
-        {
-            unsafe
-            {
-                IntPtr pBackBuffer = bitmap.BackBuffer + y * bitmap.BackBufferStride + x * BytesPerPixel;
-                *((int*)pBackBuffer) = color;
-            }
-        }
-
-        protected void FillRect(Int32Rect rect)
-        {
-            unsafe
-            {
-                IntPtr pBackBuffer = IntPtr.Zero;
-                for (int y = rect.Y; y < rect.Height + rect.Y; y++)
-                {
-                    pBackBuffer = bitmap.BackBuffer + y * bitmap.BackBufferStride;
-                    for (int x = rect.X; x < rect.Width + rect.X; x++)
-                    {
-                        if (x == rect.X)
-                        {
-                            // left offset
-                            pBackBuffer += x * BytesPerPixel;
-                        }
-
-                        *((int*)pBackBuffer) = color;
-                        pBackBuffer += BytesPerPixel;
-                    }
-                }
-            }
-        }
+        protected abstract void RenderCore(IDrawingContext context);
     }
 }

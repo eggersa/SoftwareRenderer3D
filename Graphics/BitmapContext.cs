@@ -16,18 +16,16 @@ namespace SoftwareRenderer3D.Graphics
             this.bitmap = bitmap;
         }
 
-        public void DrawLine(Color color, Point start, Point end)
+        public void DrawLine(Color color, Int32Point start, Int32Point end)
         {
             // Implementation of the Bresenham line algorithm derived from the ideas given in
             // https://de.wikipedia.org/wiki/Bresenham-Algorithmus
             // https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
 
-            // Get absolute coordinates
-            //
-            int x1 = (int)(start.X * bitmap.PixelWidth);
-            int y1 = (int)(start.Y * bitmap.PixelHeight);
-            int x2 = (int)(end.X * bitmap.PixelWidth);
-            int y2 = (int)(end.Y * bitmap.PixelHeight);
+            int x1 = start.X;
+            int y1 = start.Y;
+            int x2 = end.X;
+            int y2 = end.Y;
 
             int dy = y2 - y1;
             int dx = x2 - x1;

@@ -1,5 +1,4 @@
 ﻿using SoftwareRenderer3D.Graphics;
-using Sr3D.Core;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -15,12 +14,12 @@ namespace Sr3D.Graphics
 
         private WriteableBitmap bitmap;
 
-        public int PixelWidth
+        public int ScreenWidth
         {
             get => bitmap.PixelWidth;
         }
 
-        public int PixelHeight
+        public int ScreenHeight
         {
             get => bitmap.PixelHeight;
         }

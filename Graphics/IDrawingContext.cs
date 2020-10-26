@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Sr3D.Core;
+using System.Windows;
 using System.Windows.Media;
 
 namespace SoftwareRenderer3D.Graphics
@@ -10,7 +11,7 @@ namespace SoftwareRenderer3D.Graphics
     {
         void DrawPixel(Color color, int x, int y);
 
-        void DrawLine(Color color, Point start, Point end);
+        void DrawLine(Color color, Int32Point start, Int32Point end);
 
         void FillRect(Color color, Int32Rect rect);
 

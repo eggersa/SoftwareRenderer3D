@@ -18,6 +18,7 @@ namespace SoftwareRenderer3D.Graphics
 
         public void FillTriangle(Color c, Int32Point[] vertices)
         {
+            // Compute axis-aligned bounding box (AABB) of triangle
             int xmin = Math.Min(Math.Min(vertices[0].X, vertices[1].X), vertices[2].X);
             int ymin = Math.Min(Math.Min(vertices[0].Y, vertices[1].Y), vertices[2].Y);
             int xmax = Math.Max(Math.Max(vertices[0].X, vertices[1].X), vertices[2].X);
@@ -29,10 +30,13 @@ namespace SoftwareRenderer3D.Graphics
 
             var p = new Vector2();
 
+            // Iterate rows inside bounding box
             for (p.Y = ymin; p.Y <= ymax; p.Y++)
             {
+                // Iterate columns inside bounding box
                 for (p.X = xmin; p.X <= xmax; p.X++)
                 {
+                    // Zero or positive value means pixel p is inside positive half-space (perp product is equal to |a|*|b|*sin(alpha)).
                     bool inside = MathUtils.Perp(bv - av, p - av) >= 0 &&
                                   MathUtils.Perp(cv - bv, p - bv) >= 0 &&
                                   MathUtils.Perp(av - cv, p - cv) >= 0;

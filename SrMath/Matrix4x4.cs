@@ -1,7 +1,17 @@
-﻿namespace Sr3D.SrMath
+﻿using System;
+
+namespace Sr3D.SrMath
 {
-    public class Matrix4x4
+    public class Matrix4x4 : ICloneable
     {
+        public static Matrix4x4 Identity => new Matrix4x4()
+        {
+            M11 = 1,
+            M22 = 1,
+            M33 = 1,
+            M44 = 1
+        };
+
         public float M11;
         public float M44;
         public float M43;
@@ -58,12 +68,100 @@
             return result;
         }
 
-        public static Matrix4x4 Identity = new Matrix4x4()
+        public static Matrix4x4 CreateRotationZ(float radians)
         {
-            M11 = 1,
-            M22 = 1,
-            M33 = 1,
-            M44 = 1
-        };
+            var sin = (float)Math.Sin(radians);
+            var cos = (float)Math.Cos(radians);
+
+            // | cos(r)   sin(r)   0   0 |
+            // | -sin(r)  cos(r)   0   0 |
+            // | 0        0        1   0 |
+            // | 0        0        0   1 |
+
+            Matrix4x4 rotation = Identity;
+            rotation.M11 = cos;
+            rotation.M12 = sin;
+            rotation.M21 = -sin;
+            rotation.M22 = cos;
+
+            return rotation;
+        }
+
+        public static Matrix4x4 CreateRotationY(float radians)
+        {
+            var sin = (float)Math.Sin(radians);
+            var cos = (float)Math.Cos(radians);
+
+            // | cos(r)   0   sin(r)   0 |
+            // | 0        1   0        0 |
+            // | -sin(r)  0   cos(r)   0 |
+            // | 0        0        0   1 |
+
+            Matrix4x4 rotation = Identity;
+            rotation.M11 = cos;
+            rotation.M13 = sin;
+            rotation.M31 = -sin;
+            rotation.M33 = cos;
+
+            return rotation;
+        }
+
+        public static Matrix4x4 CreateRotationX(float radians)
+        {
+            var sin = (float)Math.Sin(radians);
+            var cos = (float)Math.Cos(radians);
+
+            // | 1  0        0       0 |
+            // | 0  cos(r)   sin(r)  0 |
+            // | 0  -sin(r)  cos(r)  0 |
+            // | 0  0        0       1 |
+
+            Matrix4x4 rotation = Identity;
+            rotation.M22 = cos;
+            rotation.M23 = sin;
+            rotation.M32 = -sin;
+            rotation.M33 = cos;
+
+            return rotation;
+        }
+
+        public static Matrix4x4 CreateTranslation(float x, float y, float z)
+        {
+            // | 1  0  0  x |
+            // | 0  1  0  y |
+            // | 0  0  1  z |
+            // | 0  0  0  1 |
+
+            Matrix4x4 translation = Identity;
+            translation.M14 = x;
+            translation.M24 = y;
+            translation.M34 = z;
+
+            return translation;
+        }
+
+        public object Clone()
+        {
+            var clone = new Matrix4x4();
+
+            clone.M11 = M11;
+            clone.M12 = M12;
+            clone.M13 = M13;
+            clone.M14 = M14;
+            clone.M21 = M21;
+            clone.M22 = M22;
+            clone.M23 = M23;
+            clone.M24 = M24;
+            clone.M31 = M31;
+            clone.M32 = M32;
+            clone.M33 = M33;
+            clone.M34 = M34;
+            clone.M41 = M41;
+            clone.M42 = M42;
+            clone.M43 = M43;
+            clone.M44 = M44;
+
+            return clone;
+        }
     }
 }

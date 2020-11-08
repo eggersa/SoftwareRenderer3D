@@ -1,5 +1,5 @@
 ﻿using Sr3D.Core;
-using System.Windows;
+using Sr3D.SrMath;
 
 namespace SoftwareRenderer3D.Graphics
 {
@@ -13,9 +13,10 @@ namespace SoftwareRenderer3D.Graphics
             yFactor = screenHeight / 2;
         }
 
-        public Int32Point Transform(Point p)
+        public Int32Point Transform(Vector4 v)
         {
-            return new Int32Point((int)((p.X + 1) * xFactor), (int)((-p.Y + 1) * yFactor));
+            var zInv = 1 / (v.Z); // z-inverse for perspective transform
+            return new Int32Point((int)((v.X * zInv + 1) * xFactor), (int)((-v.Y * zInv + 1) * yFactor));
         }
     }
 }

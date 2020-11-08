@@ -2,7 +2,6 @@
 using Sr3D.Core;
 using Sr3D.SrMath;
 using System.Collections.Generic;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -48,7 +47,7 @@ namespace Sr3D.Graphics
                     v = transform * v;
                 }
 
-                points.Add(pubeTransform.Transform(new Point(v.X, v.Y)));
+                points.Add(pubeTransform.Transform(v));
             }
 
             foreach (var index in lines.Indices)

@@ -34,10 +34,10 @@ namespace Sr3D.Models
             lines.Indices.Add(new int[] { 5, 6 });
             lines.Indices.Add(new int[] { 6, 7 });
             lines.Indices.Add(new int[] { 7, 4 });
-            lines.Indices.Add(new int[] { 0, 4 });
-            lines.Indices.Add(new int[] { 1, 5 });
-            lines.Indices.Add(new int[] { 2, 6 });
-            lines.Indices.Add(new int[] { 3, 7 });
+            lines.Indices.Add(new int[] { 1, 4 });
+            lines.Indices.Add(new int[] { 2, 5 });
+            lines.Indices.Add(new int[] { 3, 6 });
+            lines.Indices.Add(new int[] { 0, 7 });
         }
 
         public IndexedLineSet GetLines()

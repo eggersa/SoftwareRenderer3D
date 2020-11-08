@@ -20,7 +20,7 @@ namespace SoftwareRenderer
             InitializeComponent();
 
             scene = new Scene();
-            scene.Cube = new Cube(0.6f);
+            scene.Cube = new Cube(0.5f);
 
             renderer = new Renderer3D(display, scene);
             renderer.Resize((int)Width, (int)Height);
@@ -53,21 +53,11 @@ namespace SoftwareRenderer
             display.RenderTransform = new MatrixTransform(m);
         }
 
+        float radians = 0.0f;
         private void AnimationTimer_Tick(object sender, EventArgs e)
         {
-            float angle = 0.06047f;
-            float s = (float)Math.Sin(angle);
-            float c = (float)Math.Cos(angle);
-
-            Matrix4x4 rot = new Matrix4x4();
-            rot.M11 = c;
-            rot.M12 = -s;
-            rot.M21 = s;
-            rot.M22 = c;
-            rot.M33 = 1;
-            rot.M44 = 1;
-
-            scene.Transform = rot * scene.Transform;
+            radians = (radians + 0.16047f) % (2 * (float)Math.PI);
+            scene.Transform = Matrix4x4.CreateTranslation(0, 0, 2) * Matrix4x4.CreateRotationX(radians);
 
             renderer.Render();
         }

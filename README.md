@@ -1,11 +1,2 @@
 # SoftwareRenderer3D
-My own implementation of a 3D software renderer for the purpose of learning 3d computer graphics.
-
-#### Next steps
-- Implement triangle rasterization.
-
-#### Why C# and not C or C++?
-The focus of this work is mainly on applying and understanding different concepts for rendering a complete 3d scene. Using C or C++ properly would make the entire project more difficult.
-
-#### Thanks
-To [Chili](https://www.planetchili.net) for his amazing lessons on 3d fundamentals.
+Implementation of a 3D software renderer for the purpose of learning 3d computer graphics. Most of the concepts and architectural choices related to the graphics pipeline originate from [Chili's](https://www.planetchili.net) series [3D Programming Fundamentals](https://www.youtube.com/watch?v=uehGqieEbus).

@@ -1,15 +1,18 @@
 ﻿using SoftwareRenderer3D.Graphics;
 using Sr3D.Core;
 using Sr3D.SrMath;
-using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace Sr3D.Graphics
 {
+    public enum RenderMode { Solid, Wireframe }
+
     public class Renderer3D : BitmapRenderer
     {
         private readonly Scene scene;
+
+        public RenderMode Mode { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Renderer3D"/> class.
@@ -24,39 +27,71 @@ namespace Sr3D.Graphics
         {
             context.ClearScreen();
 
-            //var rasterizer = new EdgeRasterizer(context);
+            ITriangleRasterizer rasterizer = new EdgeRasterizer(context);
 
-            //Point[] data = new Point[] 
-            //{ 
-            //    new Point(0.2, 0.2),
-            //    new Point(0.8, 0.4),
-            //    new Point(0.5, 0.6),
-            //};
+            var model = scene.Model;
+            var transform = scene.Transform ?? Matrix4x4.Identity;
+            var pubes = new PubeScreenTransformer(ScreenWidth, ScreenHeight);
+            var origin = new Vector3();
 
-            var lines = scene.GetLineSet();
-            var transform = scene.Transform;
-
-            var pubeTransform = new PubeScreenTransformer(ScreenWidth, ScreenHeight);
-
-            var points = new List<Int32Point>();
-            foreach (var vertex in lines.Vertices)
+            for (int i = 0; i < model.Indices.Count; i += 3)
             {
-                Vector4 v = vertex;
-                if(transform != null)
+                // Model transformation
+                //
+                var a_ = transform * new Vector4(model.Vertices[model.Indices[i]], 1);
+                var b_ = transform * new Vector4(model.Vertices[model.Indices[i + 1]], 1);
+                var c_ = transform * new Vector4(model.Vertices[model.Indices[i + 2]], 1);
+
+                var a = new Vector3(a_.X, a_.Y, a_.Z);
+                var b = new Vector3(b_.X, b_.Y, b_.Z);
+                var c = new Vector3(c_.X, c_.Y, c_.Z);
+
+                // Backface culling
+                //
+                var r = a - origin;
+                var n = Vector3.Cross(c - a, b - a);
+                if (Vector3.Dot(r, n) < 0)
                 {
-                    v = transform * v;
+                    continue;
                 }
 
-                points.Add(pubeTransform.Transform(v));
-            }
+                // Perspective projection
+                //
+                var p0 = pubes.Transform(a);
+                var p1 = pubes.Transform(b);
+                var p2 = pubes.Transform(c);
 
-            foreach (var index in lines.Indices)
-            {
-                context.DrawLine(Colors.White, points[index[0]], points[index[1]]);
-            }
+                // Rasterization
+                //
+                if (Mode == RenderMode.Wireframe)
+                {
+                    context.DrawLine(Colors.White, p0, p1);
+                    context.DrawLine(Colors.White, p1, p2);
+                    context.DrawLine(Colors.White, p2, p0);
+                }
+                else
+                {
+                    var color = Colors.White;
+                    if (i == 0)
+                    {
+                        color = Colors.Red;
+                    }
+                    else if (i == 3)
+                    {
+                        color = Colors.Blue;
+                    }
+                    else if (i == 6)
+                    {
+                        color = Colors.Yellow;
+                    }
+                    else if (i == 9)
+                    {
+                        color = Colors.Green;
+                    }
 
-            //rasterizer.FillTriangle(Colors.White,
-            //    data.Select(p => MathUtils.DeviceToScreenCoordinates(p, PixelWidth, PixelHeight)).ToArray());
+                    rasterizer.FillTriangle(color, new Int32Point[] { p0, p1, p2 });
+                }
+            }
         }
     }
 }

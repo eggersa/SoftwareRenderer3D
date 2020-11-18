@@ -5,19 +5,19 @@ namespace SoftwareRenderer3D.Data
 {
     public class IndexedFaceSet
     {
-        public List<Vector4> Vertices { get; }
+        public List<Vector3> Vertices { get; }
 
         public List<int> Indices { get; }
 
         public IndexedFaceSet()
         {
-            Vertices = new List<Vector4>();
+            Vertices = new List<Vector3>();
             Indices = new List<int>();
         }
 
-        public IndexedFaceSet(Vector4[] vertices, int[] indices)
+        public IndexedFaceSet(Vector3[] vertices, int[] indices)
         {
-            Vertices = new List<Vector4>(vertices);
+            Vertices = new List<Vector3>(vertices);
             Indices = new List<int>(indices);
         }
     }

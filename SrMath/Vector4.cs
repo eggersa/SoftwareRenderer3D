@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Sr3D.SrMath
+﻿namespace Sr3D.SrMath
 {
     public struct Vector4
     {
@@ -11,20 +7,29 @@ namespace Sr3D.SrMath
         public float Z;
         public float W;
 
-        public Vector4(float value)
+        public Vector4(float value) : this(value, value, value, 1) { }
+
+        public Vector4(float x, float y, float z) : this(x, y, z, 1) { }
+
+        public Vector4(Vector3 v, float w)
         {
-            X = value;
-            Y = value;
-            Z = value;
-            W = value;
+            X = v.X;
+            Y = v.Y;
+            Z = v.Z;
+            W = w;
         }
-        
+
         public Vector4(float x, float y, float z, float w)
         {
             X = x;
             Y = y;
             Z = z;
             W = w;
+        }
+
+        public override string ToString()
+        {
+            return $"[{X} {Y} {Z} {W}]";
         }
     }
 }

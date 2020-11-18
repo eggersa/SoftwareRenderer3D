@@ -31,7 +31,7 @@ namespace SoftwareRenderer3D.Data
                 {
                     if (cols[0] == "v")
                     {
-                        var vertex = new Vector4(
+                        var vertex = new Vector3(
                             float.Parse(cols[1], CultureInfo.InvariantCulture),
                             float.Parse(cols[2], CultureInfo.InvariantCulture),
                             float.Parse(cols[3], CultureInfo.InvariantCulture));

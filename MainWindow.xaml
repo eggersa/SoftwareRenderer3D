@@ -5,9 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SoftwareRenderer"
         mc:Ignorable="d"
-        Title="Software Renderer" Height="600" Width="600" ResizeMode="NoResize">
-    <Canvas x:Name="canvas">
-        <Image x:Name="display" Stretch="None" HorizontalAlignment="Left" VerticalAlignment="Top"
+        Title="Software Renderer" Height="600" Width="600" ResizeMode="NoResize" PreviewKeyDown="Window_PreviewKeyDown">
+
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="Cube" Click="MenuItemCube_Click" />
+                <MenuItem Header="Gazebo" Click="MenuItemGazebo_Click" />
+                <Separator />
+                <MenuItem Header="_Exit" />
+            </MenuItem>
+        </Menu>
+        <Canvas x:Name="canvas" Background="Black">
+            <TextBlock x:Name="info" Foreground="White" Panel.ZIndex="10" Margin="10 10 0 0" Focusable="False">0 FPS</TextBlock>
+            <Image x:Name="display" Stretch="None" HorizontalAlignment="Left" VerticalAlignment="Top"
                RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
-    </Canvas>
+        </Canvas>
+    </DockPanel>
 </Window>

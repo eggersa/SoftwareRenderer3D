@@ -3,17 +3,20 @@ using SoftwareRenderer3D.SrMath;
 using Sr3D.Graphics;
 using Sr3D.SrMath;
 using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
+using System.Windows.Media;
 
 namespace SoftwareRenderer
 {
     public partial class MainWindow : Window
     {
         private readonly Renderer3D renderer;
-        private readonly DispatcherTimer animationTimer;
         private readonly Scene scene;
+        private readonly Stopwatch stopWatch = new Stopwatch();
+
+        private int fpsCounter;
 
         public MainWindow()
         {
@@ -25,16 +28,13 @@ namespace SoftwareRenderer
             renderer.Resize((int)Width, (int)Height);
             Loaded += MainWindow_Loaded;
             display.MouseWheel += Display_MouseWheel;
-
-            animationTimer = new DispatcherTimer();
-            animationTimer.Interval = TimeSpan.FromMilliseconds(33);
-            animationTimer.Tick += AnimationTimer_Tick;
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            scene.Model = ObjLoader.Load("cube.obj");
-            animationTimer.Start();
+            LoadModel("cube.obj");
+            // https://docs.microsoft.com/en-us/dotnet/desktop/wpf/graphics-multimedia/how-to-render-on-a-per-frame-interval-using-compositiontarget?view=netframeworkdesktop-4.8
+            CompositionTarget.Rendering += CompositionTarget_Rendering;
         }
 
         private void Display_MouseWheel(object sender, MouseWheelEventArgs e)
@@ -53,48 +53,81 @@ namespace SoftwareRenderer
             //display.RenderTransform = new MatrixTransform(m);
         }
 
+        private void MenuItemCube_Click(object sender, RoutedEventArgs e)
+        {
+            LoadModel("cube.obj");
+        }
+
+        private void MenuItemGazebo_Click(object sender, RoutedEventArgs e)
+        {
+            LoadModel("gazebo.obj");
+        }
+
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.M)
             {
-                renderer.Wireframe = !renderer.Wireframe;
+                renderer.Mode = renderer.Mode == RenderMode.Solid ? RenderMode.Wireframe : RenderMode.Solid;
+            }
+
+            if(e.Key == Key.I)
+            {
+                info.Visibility = info.IsVisible ? Visibility.Hidden : Visibility.Visible;
             }
         }
 
-        private float rotX = 0.0f;
-        private float rotY = 0.0f;
-        private float rotInc = 0.1047f;
-
-        private void UpdateState()
+        private void UpdateState(float dt)
         {
+            float rotX = scene.RotX;
+            float rotY = scene.RotY;
+
             if (Keyboard.IsKeyDown(Key.Up))
             {
-                rotX = SrMathUtils.SanitizeAngle(rotX - rotInc);
+                scene.RotX = SrMathUtils.SanitizeAngle(scene.RotX - Scene.RotInc);
             }
             else if (Keyboard.IsKeyDown(Key.Down))
             {
-                rotX = SrMathUtils.SanitizeAngle(rotX + rotInc);
+                scene.RotX = SrMathUtils.SanitizeAngle(scene.RotX + Scene.RotInc);
             }
 
             if (Keyboard.IsKeyDown(Key.Right))
             {
-                rotY = SrMathUtils.SanitizeAngle(rotY - rotInc);
+                scene.RotY = SrMathUtils.SanitizeAngle(scene.RotY - Scene.RotInc);
             }
             else if (Keyboard.IsKeyDown(Key.Left))
             {
-                rotY = SrMathUtils.SanitizeAngle(rotY + rotInc);
+                scene.RotY = SrMathUtils.SanitizeAngle(scene.RotY + Scene.RotInc);
+            }
+
+            scene.Transform = Matrix4x4.CreateTranslation(0, 0, 1.5f) *
+                              Matrix4x4.CreateRotationX(scene.RotX) *
+                              Matrix4x4.CreateRotationY(scene.RotY);
+        }
+
+        private void CompositionTarget_Rendering(object sender, EventArgs e)
+        {
+            if(fpsCounter++ == 0)
+            {
+                stopWatch.Restart();
+            }
+
+            UpdateState(0);
+
+            renderer.Render();
+
+            if (stopWatch.ElapsedMilliseconds > 999)
+            {
+                info.Text = $"{fpsCounter} fps";
+                fpsCounter = 0;
             }
         }
 
-        private void AnimationTimer_Tick(object sender, EventArgs e)
+        private void LoadModel(string model)
         {
-            UpdateState();
+            scene.RotX = 0;
+            scene.RotY = 0;
 
-            scene.Transform = Matrix4x4.CreateTranslation(0, 0, 2) *
-                   Matrix4x4.CreateRotationX(rotX) *
-                   Matrix4x4.CreateRotationY(rotY);
-
-            renderer.Render();
+            scene.Model = ObjLoader.Load(model);
         }
     }
 }

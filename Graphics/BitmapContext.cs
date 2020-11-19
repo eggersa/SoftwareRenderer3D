@@ -78,7 +78,7 @@ namespace SoftwareRenderer3D.Graphics
             unsafe
             {
                 IntPtr pBackBuffer = bitmap.BackBuffer + y * bitmap.BackBufferStride + x * BytesPerPixel;
-                *((int*)pBackBuffer) = ColorToInt(color);
+                *(int*)pBackBuffer = ColorToInt(color);
             }
         }
 

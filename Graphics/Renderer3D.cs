@@ -27,6 +27,11 @@ namespace Sr3D.Graphics
         {
             context.ClearScreen();
 
+            if(scene.Model == null)
+            {
+                return;
+            }
+
             ITriangleRasterizer rasterizer = new EdgeRasterizer(context);
 
             var model = scene.Model;
@@ -61,6 +66,10 @@ namespace Sr3D.Graphics
                 var p1 = pubes.Transform(b);
                 var p2 = pubes.Transform(c);
 
+                var uv0 = new Int32Point();
+                var uv1 = new Int32Point();
+                var uv2 = new Int32Point();
+
                 // Rasterization
                 //
                 if (Mode == RenderMode.Wireframe)
@@ -89,7 +98,9 @@ namespace Sr3D.Graphics
                         color = Colors.Green;
                     }
 
-                    rasterizer.FillTriangle(color, new Int32Point[] { p0, p1, p2 });
+                    rasterizer.FillTriangle(color, 
+                        new Int32Point[] { p0, p1, p2 }, 
+                        new Int32Point[] { uv0, uv1, uv2 });
                 }
             }
         }

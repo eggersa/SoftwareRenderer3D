@@ -15,7 +15,7 @@ namespace SoftwareRenderer3D.Graphics
             this.context = context;
         }
 
-        public void FillTriangle(Color c, Int32Point[] vertices)
+        public void FillTriangle(Color c, Int32Point[] vertices, Int32Point[] uv)
         {
             var p1 = vertices[0];
             var p2 = vertices[1];

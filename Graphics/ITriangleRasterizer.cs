@@ -10,6 +10,6 @@ namespace SoftwareRenderer3D.Graphics
         /// </summary>
         /// <param name="c">The fill color.</param>
         /// <param name="vertices">An array with 3 screen coordinates in counter-clockwise order that define a triangle.</param>
-        void FillTriangle(Color c, Int32Point[] vertices);
+        void FillTriangle(Color c, Int32Point[] vertices, Int32Point[] uv);
     }
 }

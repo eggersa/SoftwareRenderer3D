@@ -4,7 +4,7 @@ using System;
 using System.Windows;
 using System.Windows.Media;
 
-namespace SoftwareRenderer3D.Graphics
+namespace CSharpRenderer.Graphics
 {
     public class ScanlineRasterizer : ITriangleRasterizer
     {

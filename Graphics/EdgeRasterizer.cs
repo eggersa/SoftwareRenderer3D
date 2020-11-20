@@ -3,15 +3,15 @@
 using Sr3D.Core;
 using System;
 using System.Windows.Media;
-using SrMathUtils = SoftwareRenderer3D.SrMath.SrMathUtils;
+using SrMathUtils = CSharpRenderer.SrMath.SrMathUtils;
 
 #if USE_NUMERICS
 using System.Numerics;
 #else
-using SoftwareRenderer3D.SrMath;
+using CSharpRenderer.SrMath;
 #endif
 
-namespace SoftwareRenderer3D.Graphics
+namespace CSharpRenderer.Graphics
 {
     // https://www.cs.drexel.edu/~david/Classes/Papers/comp175-06-pineda.pdf
     // https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/rasterization-stage
@@ -61,15 +61,17 @@ namespace SoftwareRenderer3D.Graphics
                                  ((e3 = SrMathUtils.Perp(edgeC, p - cv)) > 0 || e3 == 0 && edgeC.Y <= 0);
                     if (inside)
                     {
-                        var area = SrMathUtils.Perp(edgeA, edgeB); // actually double the area, but will cancel out anyway later on
+                        var areaInv = 1 / SrMathUtils.Perp(edgeA, edgeB); // actually double the area, but will cancel out anyway later on
 
                         // Interpolate color value using barycentrc coordinates
                         //
-                        var barycentricA = area / e1;
-                        var barycentricB = area / e2;
-                        var barycentricC = area / e3;
+                        var barycentricA = e1 * areaInv;
+                        var barycentricB = e2 * areaInv;
+                        var barycentricC = e3 * areaInv;
 
-                        var interpolated = Color.FromRgb((byte)(255 * barycentricA), (byte)(255 * barycentricB), (byte)(255 * barycentricC));
+                        int interpolated = (int)(255 * barycentricA) << 16 |
+                                           (int)(255 * barycentricB) << 8 |
+                                           (int)(255 * barycentricC) << 0;
 
                         context.DrawPixel(interpolated, (int)p.X, (int)p.Y);
                     }

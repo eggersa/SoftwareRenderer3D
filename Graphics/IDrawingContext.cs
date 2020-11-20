@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Media;
 
-namespace SoftwareRenderer3D.Graphics
+namespace CSharpRenderer.Graphics
 {
     /// <summary>
     /// The drawing context exposes methods and properties to draw pixels on a screen.
@@ -10,6 +10,8 @@ namespace SoftwareRenderer3D.Graphics
     public interface IDrawingContext
     {
         void DrawPixel(Color color, int x, int y);
+
+        void DrawPixel(int color, int x, int y);
 
         void DrawLine(Color color, Int32Point start, Int32Point end);
 

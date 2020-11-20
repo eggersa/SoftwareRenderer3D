@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace SoftwareRenderer3D.Graphics
+namespace CSharpRenderer.Graphics
 {
     public class BitmapContext : IDrawingContext
     {
@@ -75,10 +75,15 @@ namespace SoftwareRenderer3D.Graphics
 
         public void DrawPixel(Color color, int x, int y)
         {
+            DrawPixel(ColorToInt(color), x, y);
+        }
+
+        public void DrawPixel(int color, int x, int y)
+        {
             unsafe
             {
                 IntPtr pBackBuffer = bitmap.BackBuffer + y * bitmap.BackBufferStride + x * BytesPerPixel;
-                *(int*)pBackBuffer = ColorToInt(color);
+                *(int*)pBackBuffer = color;
             }
         }
 
@@ -105,7 +110,7 @@ namespace SoftwareRenderer3D.Graphics
             }
         }
 
-        public  void ClearScreen()
+        public void ClearScreen()
         {
             NativeWin32.RtlZeroMemory(bitmap.BackBuffer, bitmap.PixelWidth * bitmap.PixelHeight * BytesPerPixel);
         }

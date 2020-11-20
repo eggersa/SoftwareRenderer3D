@@ -3,7 +3,7 @@ using System;
 using System.Globalization;
 using System.IO;
 
-namespace SoftwareRenderer3D.Data
+namespace CSharpRenderer.Data
 {
     // https://en.wikipedia.org/wiki/Wavefront_.obj_file
     public static class ObjLoader

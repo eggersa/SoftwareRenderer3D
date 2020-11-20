@@ -1,7 +1,7 @@
 ﻿using Sr3D.SrMath;
 using System.Drawing;
 
-namespace SoftwareRenderer3D.Data
+namespace CSharpRenderer.Data
 {
     public struct Vertex
     {

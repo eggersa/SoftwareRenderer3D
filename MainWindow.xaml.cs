@@ -1,5 +1,5 @@
-﻿using SoftwareRenderer3D.Data;
-using SoftwareRenderer3D.SrMath;
+﻿using CSharpRenderer.Data;
+using CSharpRenderer.SrMath;
 using Sr3D.Graphics;
 using Sr3D.SrMath;
 using System;

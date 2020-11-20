@@ -1,7 +1,7 @@
 ﻿using Sr3D.SrMath;
 using System.Collections.Generic;
 
-namespace SoftwareRenderer3D.Data
+namespace CSharpRenderer.Data
 {
     public class IndexedFaceSet
     {

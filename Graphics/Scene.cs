@@ -1,4 +1,4 @@
-﻿using SoftwareRenderer3D.Data;
+﻿using CSharpRenderer.Data;
 using Sr3D.SrMath;
 
 namespace Sr3D.Graphics

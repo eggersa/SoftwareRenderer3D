@@ -1,7 +1,7 @@
 ﻿using Sr3D.Core;
 using Sr3D.SrMath;
 
-namespace SoftwareRenderer3D.Graphics
+namespace CSharpRenderer.Graphics
 {
     public class PubeScreenTransformer
     {

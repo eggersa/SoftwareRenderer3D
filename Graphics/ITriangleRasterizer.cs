@@ -1,7 +1,7 @@
 ﻿using Sr3D.Core;
 using System.Windows.Media;
 
-namespace SoftwareRenderer3D.Graphics
+namespace CSharpRenderer.Graphics
 {
     public interface ITriangleRasterizer
     {

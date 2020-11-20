@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SoftwareRenderer3D.SrMath
+namespace CSharpRenderer.SrMath
 {
     public class SrMathUtils
     {
@@ -36,9 +36,9 @@ namespace SoftwareRenderer3D.SrMath
         /// <param name="b">The vector b.</param>
         /// <returns>The perp product of vector a and b.</returns>
         /// <remarks>https://mathworld.wolfram.com/PerpDotProduct.html</remarks>
-        public static float Perp(SoftwareRenderer3D.SrMath.Vector2 a, SoftwareRenderer3D.SrMath.Vector2 b)
+        public static float Perp(CSharpRenderer.SrMath.Vector2 a, CSharpRenderer.SrMath.Vector2 b)
         {
-            return SoftwareRenderer3D.SrMath.Vector2.Dot(new SoftwareRenderer3D.SrMath.Vector2(-a.Y, a.X), b);
+            return CSharpRenderer.SrMath.Vector2.Dot(new CSharpRenderer.SrMath.Vector2(-a.Y, a.X), b);
         }
     }
 }

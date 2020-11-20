@@ -1,4 +1,4 @@
-﻿using SoftwareRenderer3D.Graphics;
+﻿using CSharpRenderer.Graphics;
 using Sr3D.Core;
 using Sr3D.SrMath;
 using System.Windows.Controls;

@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics.X86;
 
-namespace SoftwareRenderer3D.SrMath
+namespace CSharpRenderer.SrMath
 {
     public struct Vector2
     {

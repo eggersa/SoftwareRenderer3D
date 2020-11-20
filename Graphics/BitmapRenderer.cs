@@ -1,4 +1,4 @@
-﻿using SoftwareRenderer3D.Graphics;
+﻿using CSharpRenderer.Graphics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CSharpRenderer.Benchmark": {
+      "commandName": "Project",
+      "commandLineArgs": "--filter *"
+    }
+  }
+}

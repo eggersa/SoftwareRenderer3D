@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpRenderer.Engine", "CS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpRenderer.Wpf", "CSharpRenderer.Wpf\CSharpRenderer.Wpf.csproj", "{399749AD-BBE1-4C72-8A55-63525453CFC1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpRenderer.Benchmark", "CSharpRenderer.Benchmark\CSharpRenderer.Benchmark.csproj", "{652F7F99-AB5F-4960-9FDC-1C7778548268}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{399749AD-BBE1-4C72-8A55-63525453CFC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{399749AD-BBE1-4C72-8A55-63525453CFC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{399749AD-BBE1-4C72-8A55-63525453CFC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{652F7F99-AB5F-4960-9FDC-1C7778548268}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{652F7F99-AB5F-4960-9FDC-1C7778548268}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{652F7F99-AB5F-4960-9FDC-1C7778548268}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{652F7F99-AB5F-4960-9FDC-1C7778548268}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

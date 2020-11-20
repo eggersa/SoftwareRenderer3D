@@ -12,10 +12,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="cube.obj">
+    <ProjectReference Include="..\CSharpRenderer.Engine\CSharpRenderer.Engine.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Models\cube.obj">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="gazebo.obj">
+    <None Update="Models\gazebo.obj">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

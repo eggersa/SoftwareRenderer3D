@@ -1,13 +1,14 @@
-﻿using Sr3D.Core;
+﻿using CSharpRenderer.Core;
+using Sr3D.Core;
 using Sr3D.SrMath;
 
 namespace CSharpRenderer.Graphics
 {
-    public class PubeScreenTransformer
+    public class ScreenTransformer
     {
         private float xFactor, yFactor;
 
-        public PubeScreenTransformer(int screenWidth, int screenHeight)
+        public ScreenTransformer(int screenWidth, int screenHeight)
         {
             xFactor = screenWidth / 2;
             yFactor = screenHeight / 2;

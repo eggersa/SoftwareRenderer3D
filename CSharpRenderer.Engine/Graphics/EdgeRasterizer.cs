@@ -1,9 +1,9 @@
 ﻿#define USE_NUMERICS
 
-using Sr3D.Core;
 using System;
-using System.Windows.Media;
 using SrMathUtils = CSharpRenderer.SrMath.SrMathUtils;
+using System.Drawing;
+using CSharpRenderer.Core;
 
 #if USE_NUMERICS
 using System.Numerics;
@@ -17,11 +17,11 @@ namespace CSharpRenderer.Graphics
     // https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/rasterization-stage
     public class EdgeRasterizer : ITriangleRasterizer
     {
-        private readonly IDrawingContext context;
+        private readonly Surface surface;
 
-        public EdgeRasterizer(IDrawingContext context)
+        public EdgeRasterizer(Surface surface)
         {
-            this.context = context;
+            this.surface = surface;
         }
 
         public void FillTriangle(Color c, Int32Point[] vertices, Int32Point[] uv)
@@ -73,7 +73,7 @@ namespace CSharpRenderer.Graphics
                                            (int)(255 * barycentricB) << 8 |
                                            (int)(255 * barycentricC) << 0;
 
-                        context.DrawPixel(interpolated, (int)p.X, (int)p.Y);
+                        surface.DrawPixel(interpolated, (int)p.X, (int)p.Y);
                     }
                 }
             }

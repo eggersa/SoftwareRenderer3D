@@ -2,7 +2,7 @@
 
 namespace Sr3D.Core
 {
-    internal static class NativeWin32
+    public static class NativeWin32
     {
         /// <summary>
         /// The RtlZeroMemory routine fills a block of memory with zeros, given a pointer to the block and the length, in bytes, to be filled.
@@ -11,6 +11,6 @@ namespace Sr3D.Core
         /// <param name="length">Datatype: size_t. The number of bytes to fill with zeros.</param>
         /// <remarks>https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlzeromemory</remarks>
         [System.Runtime.InteropServices.DllImport("kernel32.dll")]
-        internal static extern void RtlZeroMemory(IntPtr dst, int length);
+        public static extern void RtlZeroMemory(IntPtr dst, int length);
     }
 }

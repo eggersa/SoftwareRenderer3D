@@ -1,4 +1,4 @@
-﻿namespace Sr3D.Core
+﻿namespace CSharpRenderer.Core
 {
     public struct Int32Point
     {

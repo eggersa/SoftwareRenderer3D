@@ -1,7 +1,7 @@
 ﻿using CSharpRenderer.Data;
 using Sr3D.SrMath;
 
-namespace Sr3D.Graphics
+namespace CSharpRenderer.Graphics
 {
     public class Scene
     {

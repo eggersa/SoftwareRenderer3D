@@ -18,8 +18,7 @@
         </Menu>
         <Canvas x:Name="canvas" Background="Black">
             <TextBlock x:Name="info" Foreground="White" Panel.ZIndex="10" Margin="10 10 0 0" Focusable="False">0 FPS</TextBlock>
-            <Image x:Name="display" Stretch="None" HorizontalAlignment="Left" VerticalAlignment="Top"
-               RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+            <Image x:Name="display" HorizontalAlignment="Left" VerticalAlignment="Top" SizeChanged="Display_SizeChanged" />
         </Canvas>
     </DockPanel>
 </Window>

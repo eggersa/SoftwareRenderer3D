@@ -1,22 +1,34 @@
-﻿using Sr3D.Core;
+﻿using CSharpRenderer.Core;
+using Sr3D.Core;
 using System;
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using System.Drawing;
 
 namespace CSharpRenderer.Graphics
 {
-    public class BitmapContext : IDrawingContext
+    public class Surface
     {
-        private readonly int BytesPerPixel = PixelFormats.Bgr32.BitsPerPixel / 8;
-        private readonly WriteableBitmap bitmap;
+        public IntPtr Buffer { get; set; }
 
-        public BitmapContext(WriteableBitmap bitmap)
+        public int Stride { get; set; }
+
+        public int PixelSize { get; set; }
+
+        public int Width { get; set; }
+
+        public int Height { get; set; }
+
+        public Surface() { }
+
+        public Surface(IntPtr buffer, int stride, int pixelSize, int width, int height)
         {
-            this.bitmap = bitmap;
+            Buffer = buffer;
+            Stride = stride;
+            PixelSize = pixelSize;
+            Width = width;
+            Height = height;
         }
 
-        public void DrawLine(Color color, Int32Point start, Int32Point end)
+        internal void DrawLine(Color color, Int32Point start, Int32Point end)
         {
             // Implementation of the Bresenham line algorithm derived from the ideas given in
             // https://de.wikipedia.org/wiki/Bresenham-Algorithmus
@@ -73,46 +85,46 @@ namespace CSharpRenderer.Graphics
             }
         }
 
-        public void DrawPixel(Color color, int x, int y)
-        {
-            DrawPixel(ColorToInt(color), x, y);
-        }
-
-        public void DrawPixel(int color, int x, int y)
-        {
-            unsafe
-            {
-                IntPtr pBackBuffer = bitmap.BackBuffer + y * bitmap.BackBufferStride + x * BytesPerPixel;
-                *(int*)pBackBuffer = color;
-            }
-        }
-
-        public void FillRect(Color color, Int32Rect rect)
+        internal void FillRect(Color color, Int32Rect rect)
         {
             unsafe
             {
                 IntPtr pBackBuffer = IntPtr.Zero;
                 for (int y = rect.Y; y < rect.Height + rect.Y; y++)
                 {
-                    pBackBuffer = bitmap.BackBuffer + y * bitmap.BackBufferStride;
+                    pBackBuffer = Buffer + y * Stride;
                     for (int x = rect.X; x < rect.Width + rect.X; x++)
                     {
                         if (x == rect.X)
                         {
                             // left offset
-                            pBackBuffer += x * BytesPerPixel;
+                            pBackBuffer += x * PixelSize;
                         }
 
-                        *((int*)pBackBuffer) = ColorToInt(color);
-                        pBackBuffer += BytesPerPixel;
+                        *(int*)pBackBuffer = ColorToInt(color);
+                        pBackBuffer += PixelSize;
                     }
                 }
             }
         }
 
-        public void ClearScreen()
+        internal void DrawPixel(Color color, int x, int y)
         {
-            NativeWin32.RtlZeroMemory(bitmap.BackBuffer, bitmap.PixelWidth * bitmap.PixelHeight * BytesPerPixel);
+            DrawPixel(ColorToInt(color), x, y);
+        }
+
+        internal void DrawPixel(int color, int x, int y)
+        {
+            unsafe
+            {
+                IntPtr pBackBuffer = Buffer + y * Stride + x * PixelSize;
+                *(int*)pBackBuffer = color;
+            }
+        }
+
+        internal void ClearScreen()
+        {
+            NativeWin32.RtlZeroMemory(Buffer, Width * Height * PixelSize);
         }
 
         private static int ColorToInt(Color color)

@@ -1,20 +1,22 @@
 ﻿using CSharpRenderer.Data;
+using CSharpRenderer.Graphics;
 using CSharpRenderer.SrMath;
-using Sr3D.Graphics;
 using Sr3D.SrMath;
 using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace SoftwareRenderer
 {
     public partial class MainWindow : Window
     {
-        private readonly Renderer3D renderer;
         private readonly Scene scene;
         private readonly Stopwatch stopWatch = new Stopwatch();
+        
+        private WriteableBitmap bitmap;
 
         private int fpsCounter;
 
@@ -24,15 +26,16 @@ namespace SoftwareRenderer
 
             scene = new Scene();
 
-            renderer = new Renderer3D(display, scene);
-            renderer.Resize((int)Width, (int)Height);
             Loaded += MainWindow_Loaded;
             display.MouseWheel += Display_MouseWheel;
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            LoadModel("cube.obj");
+            LoadModel(@"Models\cube.obj");
+
+            CreateBitmap();
+
             // https://docs.microsoft.com/en-us/dotnet/desktop/wpf/graphics-multimedia/how-to-render-on-a-per-frame-interval-using-compositiontarget?view=netframeworkdesktop-4.8
             CompositionTarget.Rendering += CompositionTarget_Rendering;
         }
@@ -55,22 +58,22 @@ namespace SoftwareRenderer
 
         private void MenuItemCube_Click(object sender, RoutedEventArgs e)
         {
-            LoadModel("cube.obj");
+            LoadModel(@"Models\cube.obj");
         }
 
         private void MenuItemGazebo_Click(object sender, RoutedEventArgs e)
         {
-            LoadModel("gazebo.obj");
+            LoadModel(@"Models\gazebo.obj");
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.M)
             {
-                renderer.Mode = renderer.Mode == RenderMode.Solid ? RenderMode.Wireframe : RenderMode.Solid;
+                //renderer.Mode = renderer.Mode == RenderMode.Solid ? RenderMode.Wireframe : RenderMode.Solid;
             }
 
-            if(e.Key == Key.I)
+            if (e.Key == Key.I)
             {
                 info.Visibility = info.IsVisible ? Visibility.Hidden : Visibility.Visible;
             }
@@ -106,14 +109,34 @@ namespace SoftwareRenderer
 
         private void CompositionTarget_Rendering(object sender, EventArgs e)
         {
-            if(fpsCounter++ == 0)
+            UpdateState(0);
+
+            if (bitmap == null)
+            {
+                return;
+            }
+
+            if (fpsCounter++ == 0)
             {
                 stopWatch.Restart();
             }
 
-            UpdateState(0);
+            try
+            {
+                bitmap.Lock();
 
-            renderer.Render();
+                var surface = new Surface(bitmap.BackBuffer, bitmap.BackBufferStride, 4,
+                    bitmap.PixelWidth, bitmap.PixelHeight);
+
+                var renderer = new Renderer(surface);
+                renderer.Render(scene);
+
+                bitmap.AddDirtyRect(new Int32Rect(0, 0, bitmap.PixelWidth, bitmap.PixelHeight));
+            }
+            finally
+            {
+                bitmap.Unlock();
+            }
 
             if (stopWatch.ElapsedMilliseconds > 999)
             {
@@ -128,6 +151,17 @@ namespace SoftwareRenderer
             scene.RotY = 0;
 
             scene.Model = ObjLoader.Load(model);
+        }
+
+        private void CreateBitmap()
+        {
+            bitmap = new WriteableBitmap((int)canvas.ActualWidth, (int)canvas.ActualHeight, 96, 96, PixelFormats.Bgr32, null);
+            display.Source = bitmap;
+        }
+
+        private void Display_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            CreateBitmap();
         }
     }
 }

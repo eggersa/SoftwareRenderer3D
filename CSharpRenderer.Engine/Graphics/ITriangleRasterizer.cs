@@ -1,5 +1,5 @@
-﻿using Sr3D.Core;
-using System.Windows.Media;
+﻿using CSharpRenderer.Core;
+using System.Drawing;
 
 namespace CSharpRenderer.Graphics
 {

@@ -1,43 +1,35 @@
-﻿using CSharpRenderer.Graphics;
-using Sr3D.Core;
+﻿using CSharpRenderer.Core;
 using Sr3D.SrMath;
-using System.Windows.Controls;
-using System.Windows.Media;
+using System.Diagnostics.Contracts;
 
-namespace Sr3D.Graphics
+namespace CSharpRenderer.Graphics
 {
     public enum RenderMode { Solid, Wireframe }
 
-    public class Renderer3D : BitmapRenderer
+    public class Renderer
     {
-        private readonly Scene scene;
+        private readonly ITriangleRasterizer rasterizer;
+        private readonly Surface surface;
+        private readonly ScreenTransformer screenTransformer;
 
-        public RenderMode Mode { get; set; }
+        public RenderMode Mode { get; set; } = RenderMode.Solid;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Renderer3D"/> class.
-        /// </summary>
-        /// <param name="renderTarget"></param>
-        public Renderer3D(Image renderTarget, Scene scene) : base(renderTarget)
+        public Renderer(Surface surface)
         {
-            this.scene = scene;
+            this.surface = surface;
+            rasterizer = new EdgeRasterizer(surface);
+            screenTransformer = new ScreenTransformer(surface.Width, surface.Height);
         }
 
-        protected override void RenderCore(IDrawingContext context)
+        public void Render(Scene scene, RenderMode mode = RenderMode.Solid)
         {
-            context.ClearScreen();
-
-            if(scene.Model == null)
-            {
-                return;
-            }
-
-            ITriangleRasterizer rasterizer = new EdgeRasterizer(context);
+            Contract.Requires(scene?.Model != null);
 
             var model = scene.Model;
             var transform = scene.Transform ?? Matrix4x4.Identity;
-            var pubes = new PubeScreenTransformer(ScreenWidth, ScreenHeight);
             var origin = new Vector3();
+
+            surface.ClearScreen();
 
             for (int i = 0; i < model.Indices.Count; i += 3)
             {
@@ -62,9 +54,9 @@ namespace Sr3D.Graphics
 
                 // Perspective projection
                 //
-                var p0 = pubes.Transform(a);
-                var p1 = pubes.Transform(b);
-                var p2 = pubes.Transform(c);
+                var p0 = screenTransformer.Transform(a);
+                var p1 = screenTransformer.Transform(b);
+                var p2 = screenTransformer.Transform(c);
 
                 var uv0 = new Int32Point();
                 var uv1 = new Int32Point();
@@ -74,32 +66,32 @@ namespace Sr3D.Graphics
                 //
                 if (Mode == RenderMode.Wireframe)
                 {
-                    context.DrawLine(Colors.White, p0, p1);
-                    context.DrawLine(Colors.White, p1, p2);
-                    context.DrawLine(Colors.White, p2, p0);
+                    surface.DrawLine(System.Drawing.Color.White, p0, p1);
+                    surface.DrawLine(System.Drawing.Color.White, p1, p2);
+                    surface.DrawLine(System.Drawing.Color.White, p2, p0);
                 }
                 else
                 {
-                    var color = Colors.White;
+                    var color = System.Drawing.Color.White;
                     if (i == 0)
                     {
-                        color = Colors.Red;
+                        color = System.Drawing.Color.Red;
                     }
                     else if (i == 3)
                     {
-                        color = Colors.Blue;
+                        color = System.Drawing.Color.Blue;
                     }
                     else if (i == 6)
                     {
-                        color = Colors.Yellow;
+                        color = System.Drawing.Color.Yellow;
                     }
                     else if (i == 9)
                     {
-                        color = Colors.Green;
+                        color = System.Drawing.Color.Green;
                     }
 
-                    rasterizer.FillTriangle(color, 
-                        new Int32Point[] { p0, p1, p2 }, 
+                    rasterizer.FillTriangle(color,
+                        new Int32Point[] { p0, p1, p2 },
                         new Int32Point[] { uv0, uv1, uv2 });
                 }
             }
